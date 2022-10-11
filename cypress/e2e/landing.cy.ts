@@ -14,7 +14,6 @@ describe('landing', () => {
                 cy.findByRole("button", { name: "作成" }).click();
             });
         })
-        cy.url().should("match", /\/rooms/);
         cy.findByRole("heading", {name: "メンバーを集めましょう"}).should('exist');
     })
 
