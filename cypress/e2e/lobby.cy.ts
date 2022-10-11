@@ -1,4 +1,3 @@
-
 const prepareHostRoomCreate = () => {
     cy.visit("http://localhost:8080")
     cy.findByRole("region",{ name: "ルール作成から" }).findByRole("button", { name: "作成" }).click();
@@ -8,16 +7,21 @@ const prepareHostRoomCreate = () => {
 }
 
 describe("lobby", () => {
-    it("ゲストとしてルームに訪れると参加フォームが表示される",async () => {
+    it("ゲストとしてルームに訪れると参加フォームが表示される",() => {
         prepareHostRoomCreate();
-        const form = cy.findByRole("form", { name: "名前を入力して参加する" }).should("exist");;
-        form.within(() => {
-            cy.findByRole("textbox", { name: "あなたの名前" }).should("exist").type("test-guest");
+        const anyGuestName = "guest";
+        cy.findByRole("form", { name: "名前を入力して参加する" }).within(() => {
+            cy.findByRole("textbox", { name: "あなたの名前" }).type(anyGuestName);
+            cy.findByRole("button", { name: "参加" }).click();
         });
-        form.within(() => {
-            cy.findByRole("button", { name: "参加" }).should("exist").click();
+        cy.findByRole("heading", { name: "部屋に参加しました" });
+        cy.findByLabelText("あなた").closest("li").should("have.text", anyGuestName);
+    })
+    it("名前が空欄では参加できない",() => {
+        prepareHostRoomCreate();
+        cy.findByRole("form", { name: "名前を入力して参加する" }).within(() => {
+            cy.findByRole("textbox", { name: "あなたの名前" }).clear();
+            cy.findByRole("button", { name: "参加" }).should("be.disabled");
         });
-        cy.findByRole("heading", { name: "部屋に参加しました" }).should("exist");
-        cy.findByLabelText("あなた").should("exist").closest("li").should("have.text", "test-guest");
     })
 })
