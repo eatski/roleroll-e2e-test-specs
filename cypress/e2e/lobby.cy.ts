@@ -1,26 +1,23 @@
-import {store,NAME_SPACE} from "../../firestore"
-import {addDoc, collection, deleteDoc, doc, setDoc} from "@firebase/firestore"
+
+const prepareHostRoomCreate = () => {
+    cy.visit("http://localhost:8080")
+    cy.findByRole("region",{ name: "ルール作成から" }).findByRole("button", { name: "作成" }).click();
+    cy.findByRole("heading", {name: "メンバーを集めましょう"});
+    cy.clearLocalStorage();
+    cy.reload()
+}
 
 describe("lobby", () => {
-    const roomName = "test-room";
-    const docPath = `${NAME_SPACE}/rooms/${roomName}`;
-    beforeEach(async () => {
-        await deleteDoc(doc(store, docPath));
-    });
-    it("ゲストとしてルームに訪れると入室フォームが表示される",async () => {
-        await setDoc(
-            doc(store, docPath),
-            {
-                can_join: true,
-            }
-        );
-        await addDoc(collection(store, `${docPath}/members`),{
-            name: "test-member",
-            id: "test-member-id",
-            is_host: true,
-        })
-        cy.visit("http://localhost:8080/rooms/" + roomName);
-        cy.findByRole("heading", { name: "「test-member」の部屋に入る" }).should("exist");
-        cy.findAllByRole("button", { name: "参加" }).should("exist");
+    it("ゲストとしてルームに訪れると参加フォームが表示される",async () => {
+        prepareHostRoomCreate();
+        const form = cy.findByRole("form", { name: "名前を入力して参加する" }).should("exist");;
+        form.within(() => {
+            cy.findByRole("textbox", { name: "あなたの名前" }).should("exist").type("test-guest");
+        });
+        form.within(() => {
+            cy.findByRole("button", { name: "参加" }).should("exist").click();
+        });
+        cy.findByRole("heading", { name: "部屋に参加しました" }).should("exist");
+        cy.findByLabelText("あなた").should("exist").closest("li").should("have.text", "test-guest");
     })
 })
