@@ -1,4 +1,3 @@
-
 describe('landing', () => {
 
     beforeEach(() => {
@@ -11,7 +10,7 @@ describe('landing', () => {
 
     it('ルーム作成', ()=> {
         cy.findByRole("region",{ name: "ルール作成から" }).findByRole("button", { name: "作成" }).click();
-        cy.url().should('include', '/rooms/');
+        cy.url().should("match", /\/rooms/);
     })
     
   })

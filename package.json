@@ -19,6 +19,7 @@
   "homepage": "https://github.com/eatski/roleroll-e2e-test-specs#readme",
   "devDependencies": {
     "@testing-library/cypress": "^8.0.3",
-    "cypress": "^10.9.0"
+    "cypress": "^10.9.0",
+    "typescript": "^4.8.4"
   }
 }
