@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/eatski/roleroll-e2e-test-specs/issues"
   },
-  "homepage": "https://github.com/eatski/roleroll-e2e-test-specs#readme"
+  "homepage": "https://github.com/eatski/roleroll-e2e-test-specs#readme",
+  "devDependencies": {
+    "@testing-library/cypress": "^8.0.3",
+    "cypress": "^10.9.0"
+  }
 }
